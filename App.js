@@ -1,7 +1,14 @@
 import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-
+import { StyleSheet, Text, View, StatusBar, Platform } from 'react-native';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import appReducer from './reducers'; //Import del main reducer -> appReducer
+import { logger } from 'redux-logger'
+import ReduxThunk from 'redux-thunk';
 import firebase from 'firebase';
+import { StackNavigator } from 'react-navigation';
+import Authentication from './screens/authentication';
+import LoginScreen from './screens/LoginScreen'
 
 const initialState={};
 
@@ -17,23 +24,28 @@ class App extends React.Component{
     };
     firebase.initializeApp(config);
   }
-}
 
-export default class App extends React.Component {
-  render() {
+ render(){
+    const store = createStore(
+      appReducer,
+      initialState,
+      applyMiddleware(logger, ReduxThunk)
+    );
+    
+    const MainNavigator = StackNavigator({
+        authenticate: { screen: Authentication },
+        login: { screen: LoginScreen },
+        //register : { screen: RegisterScreen },
+        //home: { screen: HomeScreen }
+      }
+    );
+
     return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
+      <Provider store={store}>
+        <MainNavigator />
+      </Provider>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default App;

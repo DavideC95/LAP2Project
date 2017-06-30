@@ -9,6 +9,11 @@ import {
 
 import firebase from 'firebase';
 
+export const goToLogin = ({ navugateTo }) =>{
+  console.log("goToLogin");
+  navigateTo('login')
+};
+
 export const loginUser = ({ email, password, navigateTo }) => {
   return (dispatch) => {
     console.log("LoginUser action: ", email, password);
@@ -50,7 +55,7 @@ const registerUserSuccess = (dispatch, user, navigateTo) => {
   navigateTo('Login')
 }
 
-const loginUserFailed = (dispatch, error)  => {
-  console.log("non sono riuscito neanche a creare un account");
-  dispatch({ type: LOGIN_USER_FAIL, payload: error })
+const RegisterUserFailed = (dispatch, error)  => {
+  console.log("non sono riuscito a creare un account");
+  dispatch({ type: REGISTER_USER_FAIL, payload: error })
 }
